@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AirGuard Certify</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css/login.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">AirGuard Certify</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Login <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="display-4">Login</h1>
+        <form id="login-form" novalidate>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <div id="success-message" class="mt-3" style="display: none;">
+            <div class="alert alert-success" role="alert">
+                Login successful! Redirecting to home page...
+            </div>
+        </div>
+        <div id="error-message" class="mt-3" style="display: none;">
+            <div class="alert alert-danger" role="alert">
+                Invalid email or password. Please try again or register if you don't have an account.
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#login-form').submit(function(event) {
+                event.preventDefault();
+                if (this.checkValidity() === false) {
+                    event.stopPropagation();
+                    $(this).addClass('was-validated');
+                } else {
+                    var formData = {
+                        email: $('#email').val(),
+                        password: $('#password').val()
+                    };
+                    // Simulating an AJAX call to a backend service
+                    $.ajax ({
+                        type: 'POST',
+                        url: 'https://example.com/login', // Replace with your backend service URL
+                        data: formData,
+                        success: function(data) {
+                            if (data.success) {
+                                $('#success-message').show();
+                                setTimeout(function() {
+                                    window.location.href = 'index.html';
+                                }, 2000);
+                            } else {
+                                $('#error-message').show();
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            $('#error-message').show();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

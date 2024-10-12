@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css/contact.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Expiry Date Reminder</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.html">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Contact Us <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="display-4">Contact Us</h1>
+        <form id="contact-form" novalidate>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                <div class="invalid-feedback">Please enter your name.</div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm your password" required>
+                <div class="invalid-feedback">Passwords do not match.</div>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea class="form-control" id="message" placeholder="Enter your message" required></textarea>
+                <div class="invalid-feedback">Please enter your message.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+        
+        <!-- Modal for success message -->
+        <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Success</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Your message has been sent successfully!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal for alerts -->
+        <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel"> Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-message">
+                        <!-- Message will be injected here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="alert-message" role="alert"></div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#contact-form').submit(function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var name = $('#name').val().trim();
+                var email = $('#email').val().trim();
+                var password = $('#password').val().trim();
+                var confirmPassword = $('#confirm-password').val().trim();
+                var message = $('#message').val().trim();
+
+                // Reset validation states
+                $('#contact-form').removeClass('was-validated');
+                $('#confirm-password').removeClass('is-invalid');
+                $('#email').removeClass('is-invalid');
+
+                // Show popup message immediately upon form submission
+                $('#alertModal').modal('show');
+                $('#modal-message').text('Form submitted!'); // Display a generic message
+
+                // Validate fields
+                if (name === '' || email === '' || password === '' || confirmPassword === '' || message === '') {
+                    $('#modal-message').text('Please fill in all fields.'); // Update message for missing fields
+                    return;
+                }
+
+                // Check if passwords match
+                if (password !== confirmPassword) {
+                    $('#confirm-password').addClass('is-invalid');
+                    $('#modal-message').text('Passwords do not match.'); // Update message for password mismatch
+                    return;
+                }
+
+                // Validate email format
+                var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailRegex.test(email)) {
+                    $('#email').addClass('is-invalid');
+                    $('#modal-message').text('Invalid email address.'); // Update message for invalid email
+                    return;
+                }
+
+                // Submit the form data to the server
+                $.ajax({
+                    type: 'POST',
+                    url: 'your-server-url', // Replace with your server URL
+                    data: {
+                        name: name,
+                        email: email,
+                        password: password,
+                        message: message
+                    },
+                    success: function(data) {
+                        $('#contact-form').trigger('reset'); // Reset the form
+                        $('#successModal').modal('show'); // Show the success modal when the message is sent successfully
+                    },
+                    error: function(xhr, status, error) {
+                        $('#modal-message').text('Error sending message: ' + error); // Update error message
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
